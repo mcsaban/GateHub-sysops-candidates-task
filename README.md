@@ -75,7 +75,7 @@ total 8
 [superuser@target ~]$ mkdir ~/.ssh
 
 [superuser@target ~]$ chmod 700 ~/.ssh
-# transfer the private key to the local ssh directory
+### transfer the private key to the local ssh directory
 
 [superuser@target ~]$ scp fedora@192.168.1.148:/home/fedora/.ssh/id_rsa ~/.ssh/
 
@@ -91,7 +91,7 @@ Last login: Mon Jan 30 18:38:51 2023
 
 [superuser@developer ~]$   # logined
 
-### [3] 	If you set [PasswordAuthentication no], it's more secure.
+# [3] If you set [PasswordAuthentication no], it's more secure.
 
 [root@developer ~]# vi /etc/ssh/sshd_config
 ### line 73: change to [no]
