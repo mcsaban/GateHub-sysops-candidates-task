@@ -1,0 +1,246 @@
+---
+- name: Fedora Linux Update and Package Install
+  hosts: fedora
+  tasks:
+    - name: Update Fedora Server
+      dnf:
+        name: '*'
+        state: latest
+      become: true
+
+    - name: Install Snapd
+      dnf:
+        name: snapd
+        state: latest
+      become: true
+
+    - name: Install Slack via Snap
+      snap:
+        name: slack
+        channel: latest/stable
+      become: true
+
+    - name: Add Gnome-tweaks Repository
+      dnf:
+        name: gnome-tweaks
+        state: latest
+      become: true
+
+    - name: Install Htop
+      dnf:
+        name: htop
+        state: latest
+      become: true
+
+    - name: Install KeepassXC
+      dnf:
+        name: keepassxc
+        state: latest
+      become: true
+
+    - name: Install Zsh
+      dnf:
+        name: zsh
+        state: latest
+      become: true
+
+    - name: Install Docker
+      dnf:
+        name: docker-ce
+        state: latest
+      become: true
+
+    - name: Install Docker Compose
+      dnf:
+        name: docker-compose
+        state: latest
+      become: true
+
+    - name: Start and Enable Docker Service
+      service:
+        name: docker
+        state: started
+        enabled: true
+      become: true
+
+    - name: Add all users to Docker group
+      shell: |
+        for user in $(cut -d: -f1 /etc/passwd); do usermod -aG docker $user; done
+      become: true
+      become_user: root
+
+- name: Developer Tools and Packages Install
+  hosts: developer
+  tasks:
+    - name: Install Zsh
+      dnf:
+        name: zsh
+        state: latest
+      become: true
+
+    - name: Install Development Tools
+      dnf:
+        name: '@Development Tools'
+        state: latest
+      become: true
+
+    - name: Install C Development Tools and Libraries
+      dnf:
+        name: '@C Development Tools and Libraries'
+        state: latest
+      become: true
+
+    - name: Install Ansible
+      dnf:
+        name: ansible
+        state: latest
+      become: true
+
+    - name: Add Google Chrome Repository
+      command: |
+        dnf config-manager --add-repo=https://dl.google.com/linux/chrome/rpm/stable/x86_64
+      become: true
+
+    - name: Add Visual Studio Code Microsoft Repository
+      lineinfile:
+        dest: /etc/yum.repos.d/vscode.repo
+        line: |
+          [code]
+          name=Visual Studio Code
+          baseurl=https://packages.microsoft.com/yumrepos/vscode
+          enabled=1
+          gpgcheck=1
+          gpgkey=https://packages.microsoft.com/keys/microsoft.asc
+      become: true
+
+    - name: Install Visual Studio Code
+      dnf:
+        name: code
+        state: latest
+      become: true
+
+    - name: Add MySQL Community Repository
+      command: 'dnf config-manager --add-repo=https://dev.mysql.com/downloads/repo/yum/'
+      become: 'yes'
+    - name: Install Docker Community Repository
+      command: >-
+        dnf config-manager
+        --add-repo=https://download.docker.com/linux/fedora/docker-ce.repo
+      become: 'yes'
+    - name: Install Vim
+      dnf:
+        name: vim
+        state: latest
+      become: 'yes'
+- name: ssh-server-configuration
+  hosts: fedora
+  become: true
+
+  tasks:
+    - name: Disable password logins
+      lineinfile:
+        dest: /etc/ssh/sshd_config
+        line: 'PasswordAuthentication no'
+        state: present
+      become: true
+
+    - name: Disable root login
+      lineinfile:
+        dest: /etc/ssh/sshd_config
+        line: 'PermitRootLogin no'
+        state: present
+      become: true
+
+    - name: Disallow forwarding
+      lineinfile:
+        dest: /etc/ssh/sshd_config
+        line: 'AllowTcpForwarding no'
+        state: present
+      become: true
+
+    - name: Install fail2ban
+      dnf:
+        name: fail2ban
+        state: latest
+      become: true
+
+    - name: Install fail2ban and punish offensive ssh clients
+      lineinfile:
+        dest: /etc/fail2ban/jail.conf
+        line: |
+          [sshd]
+          enabled = true
+          port = ssh
+          filter = sshd
+          logpath = %(sshd_log)s
+          maxretry = 3
+        state: present
+      become: true
+
+    - name: Enable and start fail2ban service
+      service:
+        name: fail2ban
+
+    - name: Configure Firewall
+  hosts: all
+  become: yes
+
+  tasks:
+  - name: Install firewalld
+    package:
+      name: firewalld
+      state: present
+
+  - name: Start and enable firewalld
+    service:
+      name: firewalld
+      state: started
+      enabled: yes
+
+  - name: Block incoming traffic
+    firewalld:
+      state: enabled
+      permanent: true
+      immediate: false
+      zone: public
+      target: DROP
+
+  - name: Allow SSH
+    firewalld:
+      state: enabled
+      permanent: yes
+      immediate: yes
+      service: ssh
+      zone: public
+      source: 'any'
+
+
+  - name: Allow ICMP echo reply for private subnets
+    firewalld:
+      state: enabled
+      permanent: yes
+      immediate: yes
+      rich_rule: 'rule family="ipv4" source address="10.0.0.0/8" accept'
+      zone: internal
+
+  - name: Fedora Linux Firewall Configuration
+  hosts: fedora:developer
+  become: yes
+  become_user: root
+  tasks:
+
+  - name: Allow incoming SSH connections
+    firewalld:
+      state: enabled
+      permanent: yes
+      service: ssh
+      zone: public
+    notify: reload firewall
+
+  - name: Allow protocols and ports for Docker deployment
+    shell: firewall-cmd --permanent --add-port=2376/tcp && firewall-cmd --permanent --add-port=2377/tcp && firewall-cmd --permanent --add-port=7946/tcp && firewall-cmd --permanent --add-port=7946/udp && firewall-cmd --permanent --add-port=4789/udp
+    register: firewall_result
+
+  - name: Reload firewall
+    shell: firewall-cmd --reload
+    when: firewall_result.rc == 0
