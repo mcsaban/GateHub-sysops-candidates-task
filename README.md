@@ -4,30 +4,30 @@
 
 This are instructions for setting Fedora linux server environment ready to ru run Ansible playbook needed for our future work.
 
-Enable sshd service:
+### Enable sshd service:
 sudo systemctl enable sshd
 
-Edit Configuration file and remove "#" from #Port 22 If you would like to change sshd port In my case I use port "2244":
+### Edit Configuration file and remove "#" from #Port 22 If you would like to change sshd port In my case I use port "2244":
 nano /etc/ssh/sshd_config
 
-Add port in firewall:
+### Add port in firewall:
 sudo firewall-cmd --add-port=2244/tcp --permanent
 
-Restart the sshd service:
+### Restart the sshd service:
 sudo service sshd restart
 
-Add two new users: superuser and user:
+### Add two new users: superuser and user:
 adduser superuser
 adduser user
 
-Change users passwords:
+### Change users passwords:
 passwd superuser
 passwd user
 
-Add user "superuser" in sudoers file
+### Add user "superuser" in sudoers file
 sudo usermod -aG wheel superuser
 
-Install Ansible:
+### Install Ansible:
 sudo dnf install -y ansible
 
 Output:
