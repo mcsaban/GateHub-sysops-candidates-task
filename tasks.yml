@@ -43,7 +43,12 @@
         name: zsh
         state: latest
       become: true
-
+      
+- name: Docker role
+  hosts: fedora:developer
+  become: true
+  
+  tasks:   
     - name: Install Docker
       dnf:
         name: docker-ce
@@ -132,8 +137,10 @@
         name: vim
         state: latest
       become: 'yes'
-- name: ssh-server-configuration
-  hosts: fedora
+      
+      
+- name: Ansible role for configuring SSH server
+  hosts: fedora:developer
   become: true
 
   tasks:
@@ -181,10 +188,7 @@
       service:
         name: fail2ban
 
-    - name: Configure Firewall
-  hosts: all
-  become: yes
-
+- name: Ansible role for configuring firewall
   tasks:
   - name: Install firewalld
     package:
@@ -224,7 +228,7 @@
       zone: internal
 
   - name: Fedora Linux Firewall Configuration
-  hosts: fedora:developer
+  hosts: all
   become: yes
   become_user: root
   tasks:
