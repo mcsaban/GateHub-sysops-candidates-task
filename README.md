@@ -94,7 +94,7 @@ Last login: Mon Jan 30 18:38:51 2023
 ### [3] 	If you set [PasswordAuthentication no], it's more secure.
 
 [root@developer ~]# vi /etc/ssh/sshd_config
-# line 73: change to [no]
+### line 73: change to [no]
 
 PasswordAuthentication no
 [root@developer ~]# systemctl restart sshd 
@@ -105,7 +105,6 @@ ________________________________________________________________________________
 ## [part 3]
 
 This is an Ansible playbook that is used to configure and install various software packages on Fedora Linux systems.
-
 The playbook consists of two plays, one for the "fedora" hosts and one for the "developer" hosts.
 
 ### For the "fedora" hosts, the playbook performs the following tasks:
