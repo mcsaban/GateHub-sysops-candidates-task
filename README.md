@@ -105,10 +105,10 @@ ________________________________________________________________________________
 This part is about Ansible hosts file configuration data. Add hosts and ip's of developer and target machines into the hosts file in "/etc/ansible/hosts"
 In my case my "developer" machine has 192.168.1.147 local ip addres and my "target" machine 192.168.1.148
 
-- [fedora]
+- [target]
 - 192.168.1.148
 - 
-- [fedora:vars]
+- [target:vars]
 - ansible_connection=ssh
 - ansible_user=superuser
 - [developer]
@@ -122,9 +122,9 @@ ansible_user=superuser
 ## [part 4]
 
 This is an Ansible playbook that is used to configure and install various software packages on Fedora Linux systems.
-The playbook consists of two plays, one for the "fedora" hosts and one for the "developer" hosts.
+The playbook consists of two plays, one for the "target" hosts and one for the "developer" hosts.
 
-### For the "fedora" hosts, the playbook performs the following tasks:
+### For the "target" hosts, the playbook performs the following tasks:
 
     Update all packages to the latest version.
     Add the Slack repository to the system's yum repository list.
@@ -165,6 +165,16 @@ The playbook consists of two plays, one for the "fedora" hosts and one for the "
     Disallow forwarding
     Install fail2ban and punish offensive ssh clients
     
+### CA & internal self signed certificates:
+    Create certificate authority
+    Issue a wildcard certificate with newly created CA
+    ■ Use sysops.jobs domain for example
+    Create ansible role for trusting all certificates issued by our CA
+    
+### Ansible role for installing nix - https://nixos.org/ (developers only)
+    Install as plain user
+    
+
 ## [part 4]
   
     This is my playbook for Ansible: https://github.com/mcsaban/GateHub-sysops-candidates-task/blob/main/tasks.yml
@@ -172,8 +182,7 @@ The playbook consists of two plays, one for the "fedora" hosts and one for the "
 ### to run this playbook with Ansible run this command:
     
     ansible-playbook tasks.yml --ask-become-pass
-   
-   
+      
 _________________________________________________________________________
 
 used websites for help
