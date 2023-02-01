@@ -6,27 +6,27 @@ This are instructions for setting Fedora linux server environment ready to ru ru
 
 Enable sshd service:
 sudo systemctl enable sshd
------
+
 Edit Configuration file and remove "#" from #Port 22 If you would like to change sshd port In my case I use port "2244":
 nano /etc/ssh/sshd_config
------
+
 Add port in firewall:
 sudo firewall-cmd --add-port=2244/tcp --permanent
------
+
 Restart the sshd service:
 sudo service sshd restart
------
+
 Add two new users: superuser and user:
 adduser superuser
 adduser user
------
+
 Change users passwords:
 passwd superuser
 passwd user
------
+
 Add user "superuser" in sudoers file
 sudo usermod -aG wheel superuser
------
+
 Install Ansible:
 sudo dnf install -y ansible
 
@@ -35,7 +35,7 @@ Output:
 Installed:
   ansible-7.1.0-1.fc37.noarch          ansible-core-2.14.1-1.fc37.noarch
   python3-jinja2-3.0.3-5.fc37.noarch   python3-resolvelib-0.5.5-6.fc37.noarch
------
+
 Generate and setup OpenSSH : SSH Key-Pair Authentication
 
 _____________________________________________________________________________________________________________________________________________________
