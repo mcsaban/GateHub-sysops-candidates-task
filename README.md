@@ -149,10 +149,8 @@ The playbook consists of two plays, one for the "fedora" hosts and one for the "
     Install fail2ban and punish offensive ssh clients
     
 ## [part 4]
-
-    This is my playbook for Ansible:
-    
-    [check file:]([https://pages.github.com/](https://github.com/mcsaban/GateHub-sysops-candidates-task/blob/main/tasks.yml)).
+  
+    This is my playbook for Ansible: [tasks.yml]([https://pages.github.com/](https://github.com/mcsaban/GateHub-sysops-candidates-task/blob/main/tasks.yml)
     
 ### to run this playbook with Ansible run this command:
     
