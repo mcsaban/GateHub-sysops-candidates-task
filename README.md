@@ -186,13 +186,13 @@ The playbook consists of two plays, one for the "target" hosts and one for the "
 _________________________________________________________________________
 
 used websites for help
-https://docs.ansible.com/
-https://github.com/
-https://git.drinkingtea.net/
-https://code.visualstudio.com/docs/setup/linux
-https://docs.docker.com/engine/install/fedora/
-https://stackoverflow.com/
-https://www.clockworknet.com/blog/2020/03/10/managing-firewalld-with-ansible/
-https://codebeautify.org/yaml-validator
+- https://docs.ansible.com/
+- https://github.com/
+- https://git.drinkingtea.net/
+- https://code.visualstudio.com/docs/setup/linux
+- https://docs.docker.com/engine/install/fedora/
+- https://stackoverflow.com/
+- https://www.clockworknet.com/blog/2020/03/10/managing-firewalld-with-ansible/
+- https://codebeautify.org/yaml-validator
     
     
