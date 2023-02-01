@@ -49,12 +49,12 @@ ________________________________________________________________________________
 [superuser@developer ~]$ ssh-keygen
 
 Generating public/private rsa key pair.
-Enter file in which to save the key (/home/fedora/.ssh/id_rsa): # Enter or input changes if you want
-Created directory '/home/fedora/.ssh'.
+Enter file in which to save the key (/home/superuser/.ssh/id_rsa): # Enter or input changes if you want
+Created directory '/home/superuser/.ssh'.
 Enter passphrase (empty for no passphrase): # set passphrase (if set no passphrase, Enter with empty)
 Enter same passphrase again:
-Your identification has been saved in /home/fedora/.ssh/id_rsa.
-Your public key has been saved in /home/fedora/.ssh/id_rsa.pub.
+Your identification has been saved in /home/superuser/.ssh/id_rsa.
+Your public key has been saved in /home/superuser/.ssh/id_rsa.pub.
 The key fingerprint is:
 SHA256:N64p0kXAaqN/dFCdNz7IDnqm0vOTSDihz+yr2kXjyKQ fedora@192.168.1.147
 The key's randomart image is:
@@ -64,8 +64,8 @@ The key's randomart image is:
 [superuser@developer ~]$ ll ~/.ssh
 
 total 8
--rw-------. 1 fedora fedora 2655 Jan 30 18:38 id_rsa
--rw-r--r--. 1 fedora fedora  574 Jan 30 18:38 id_rsa.pub
+-rw-------. 1 superuser superuser 2655 Jan 30 18:38 id_rsa
+-rw-r--r--. 1 superuser superuser  574 Jan 30 18:38 id_rsa.pub
 
 [superuser@developer ~]$ mv ~/.ssh/id_rsa.pub ~/.ssh/authorized_keys 
 
@@ -100,9 +100,26 @@ PasswordAuthentication no
 [root@developer ~]# systemctl restart sshd 
 
 _____________________________________________________________________________________________________________________________________________________
-
-
 ## [part 3]
+
+This part is about Ansible hosts file configuration data. Add hosts and ip's of developer and target machines into the hosts file in "/etc/ansible/hosts"
+In my case my "developer" machine has 192.168.1.147 local ip addres and my "target" machine 192.168.1.148
+
+[fedora]
+192.168.1.148
+
+[fedora:vars]
+ansible_connection=ssh
+ansible_user=superuser
+[developer]
+192.168.1.147
+
+[developer:vars]
+ansible_connection=ssh
+ansible_user=superuser
+
+
+## [part 4]
 
 This is an Ansible playbook that is used to configure and install various software packages on Fedora Linux systems.
 The playbook consists of two plays, one for the "fedora" hosts and one for the "developer" hosts.
