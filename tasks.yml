@@ -1,6 +1,37 @@
+
+Skip to content
+Pull requests
+Issues
+Codespaces
+Marketplace
+Explore
+@mcsaban
+mcsaban /
+GateHub-sysops-candidates-task
+Private
+
+Cannot fork because you own this repository and are not a member of any organizations.
+
+Code
+Issues
+Pull requests
+Actions
+Projects
+Security
+Insights
+
+    Settings
+
+GateHub-sysops-candidates-task/tasks.yml
+@mcsaban
+mcsaban Update tasks.yml
+Latest commit 45b871e Feb 1, 2023
+History
+1 contributor
+250 lines (213 sloc) 5.57 KB
 ---
 - name: Fedora Linux Update and Package Install
-  hosts: fedora
+  hosts: target
   tasks:
     - name: Update Fedora Server
       dnf:
@@ -45,7 +76,7 @@
       become: true
       
 - name: Docker role
-  hosts: fedora:developer
+  hosts: target:developer
   become: true
   
   tasks:   
@@ -140,7 +171,7 @@
       
       
 - name: Ansible role for configuring SSH server
-  hosts: fedora:developer
+  hosts: target:developer
   become: true
 
   tasks:
@@ -248,3 +279,4 @@
   - name: Reload firewall
     shell: firewall-cmd --reload
     when: firewall_result.rc == 0
+
