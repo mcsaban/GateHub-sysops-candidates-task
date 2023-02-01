@@ -2,7 +2,7 @@
 
 ## [part 1]
 
-This are instructions for setting Fedora linux server environment ready to ru run Ansible playbook needed for our future work.
+These are comprehensive steps for preparing the Fedora Linux server environment to execute the necessary Ansible playbook for our upcoming tasks. The instructions will ensure that the server is fully equipped and configured for efficient and effective Ansible playbook execution.
 
 ### Enable sshd service:
 sudo systemctl enable sshd
@@ -152,11 +152,11 @@ The playbook consists of two plays, one for the "fedora" hosts and one for the "
 
     This is my playbook for Ansible:
     
-    [check file:](https://pages.github.com/).
+    [check file:]([https://pages.github.com/](https://github.com/mcsaban/GateHub-sysops-candidates-task/blob/main/tasks.yml)).
     
-    to run this playbook with Ansible run this command:
+### to run this playbook with Ansible run this command:
     
-    
+    ansible-playbook tasks.yml --ask-become-pass
     
     
     
