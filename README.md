@@ -36,8 +36,6 @@ Installed:
   ansible-7.1.0-1.fc37.noarch          ansible-core-2.14.1-1.fc37.noarch
   python3-jinja2-3.0.3-5.fc37.noarch   python3-resolvelib-0.5.5-6.fc37.noarch
 
-Generate and setup OpenSSH : SSH Key-Pair Authentication
-
 _____________________________________________________________________________________________________________________________________________________
 
 ## [part 2]
@@ -77,14 +75,14 @@ total 8
 [superuser@target ~]$ chmod 700 ~/.ssh
 ### transfer the private key to the local ssh directory
 
-[superuser@target ~]$ scp fedora@192.168.1.148:/home/fedora/.ssh/id_rsa ~/.ssh/
+[superuser@target ~]$ scp fedora@192.168.1.148:/home/superuser/.ssh/id_rsa ~/.ssh/
 
 superuser@192.168.1.148's password:
 id_rsa                                        100% 1876   193.2KB/s   00:00
 
 [superuser@target ~]$ ssh fedora@192.168.1.147
 
-Enter passphrase for key '/home/fedora/.ssh/id_rsa':   # passphrase if you set
+Enter passphrase for key '/home/superuser/.ssh/id_rsa':   # passphrase if you set
 Activate the web console with: systemctl enable --now cockpit.socket
 
 Last login: Mon Jan 30 18:38:51 2023
