@@ -248,4 +248,39 @@
   - name: Reload firewall
     shell: firewall-cmd --reload
     when: firewall_result.rc == 0
+    
+  - name: Trust CA cert
+  hosts: fedora
+  become: yes
+  tasks:
+  - name: Create a directory if it does not exist
+    file:
+      path: /usr/local/share/ca-certificates
+      state: directory
+      mode: '0755'
 
+  - name: Create a directory if it does not exist
+    file:
+      path: /usr/sbin/update-ca-certificates
+      state: directory
+      mode: '0755'
+
+  - name: Copy the CA certificate to the system
+    copy:
+      src: ca.crt
+      dest: /usr/local/share/ca-certificates/ca.crt
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: Make update-ca-certificates script executable
+    file:
+     path: /usr/sbin/update-ca-certificates
+     mode: +x
+     owner: root
+     group: root
+    become: yes
+
+  - name: Update System CA Certificates
+    shell: update-ca-trust
+    become: yes
