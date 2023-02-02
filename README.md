@@ -114,9 +114,9 @@ In my case my "developer" machine has 192.168.1.147 local ip addres and my "targ
 - [developer]
 - 192.168.1.147
 
-[developer:vars]
-ansible_connection=ssh
-ansible_user=superuser
+- [developer:vars]
+- ansible_connection=ssh
+- ansible_user=superuser
 
 
 ## [part 4]
