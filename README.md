@@ -100,22 +100,20 @@ PasswordAuthentication no
 _____________________________________________________________________________________________________________________________________________________
 ## [part 3]
 
-This part is about Ansible hosts file configuration data. Add hosts and ip's of developer and target machines into the hosts file in "/etc/ansible/hosts"
+### This part is about Ansible hosts file configuration data. Add hosts and ip's of developer and target machines into the hosts file in "/etc/ansible/hosts"
 In my case my "developer" machine has 192.168.1.147 local ip addres and my "target" machine 192.168.1.148
-
-- [target]
-- 192.168.1.148
-- 
-- [target:vars]
-- ansible_connection=ssh
-- ansible_user=superuser
-- [developer]
-- 192.168.1.147
-
-- [developer:vars]
-- ansible_connection=ssh
-- ansible_user=superuser
-
+    
+    [target]
+    192.168.1.148
+    [target:vars]
+    ansible_connection=ssh
+    ansible_user=superuser
+    [developer]
+    192.168.1.147
+    
+    [developer:vars]
+    ansible_connection=ssh
+    ansible_user=superuser
 
 ## [part 4]
 
