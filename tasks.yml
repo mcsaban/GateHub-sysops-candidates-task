@@ -250,7 +250,7 @@
     when: firewall_result.rc == 0
     
   - name: Ansible role for trusting all certificates issued by our CA
-  hosts: fedora
+  hosts: target
   become: yes
   tasks:
 
