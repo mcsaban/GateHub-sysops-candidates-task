@@ -265,3 +265,27 @@
   - name: Update System CA Certificates
     shell: update-ca-trust
     become: yes
+
+
+- name: Ansible role for installing nix
+  hosts: developer
+  become: no
+  tasks:
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+       path: /nix
+       state: directory
+       mode: '0755'
+       owner: superuser
+       group: superuser
+      become: true
+
+    - name: Download Nix installation script
+      get_url:
+        url: https://nixos.org/nix/install
+        dest: /tmp/nix-install.sh
+
+    - name: Install Nix
+      shell: |
+        sh /tmp/nix-install.sh --no-daemon
+        source ~/.nix-profile/etc/profile.d/nix.sh
