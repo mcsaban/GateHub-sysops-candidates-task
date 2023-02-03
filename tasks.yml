@@ -289,3 +289,7 @@
       shell: |
         sh /tmp/nix-install.sh --no-daemon
         source ~/.nix-profile/etc/profile.d/nix.sh
+    - name: Finishinng nix installation
+      shell: |
+        . /home/superuser/.nix-profile/etc/profile.d/nix.sh
+
