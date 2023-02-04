@@ -49,6 +49,16 @@
   become: true
   
   tasks:   
+    - name: Install Docker Community Repository
+      command: >-
+        dnf config-manager
+        --add-repo=https://download.docker.com/linux/fedora/docker-ce.repo
+      become: 'yes'
+    - name: Install Vim
+      dnf:
+        name: vim
+        state: latest
+      become: 'yes'
     - name: Install Docker
       dnf:
         name: docker-ce
@@ -126,16 +136,6 @@
 
     - name: Add MySQL Community Repository
       command: 'dnf config-manager --add-repo=https://dev.mysql.com/downloads/repo/yum/'
-      become: 'yes'
-    - name: Install Docker Community Repository
-      command: >-
-        dnf config-manager
-        --add-repo=https://download.docker.com/linux/fedora/docker-ce.repo
-      become: 'yes'
-    - name: Install Vim
-      dnf:
-        name: vim
-        state: latest
       become: 'yes'
       
       
@@ -292,4 +292,3 @@
     - name: Finishinng nix installation
       shell: |
         . /home/superuser/.nix-profile/etc/profile.d/nix.sh
-
