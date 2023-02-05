@@ -172,8 +172,8 @@ The playbook consists of two plays, one for the "target" hosts and one for the "
     
 
 ## [part 4]
-  
-    This is my playbook for Ansible: https://github.com/mcsaban/GateHub-sysops-candidates-task/blob/main/tasks.yml
+    
+    ### This is my playbook for Ansible: - https://github.com/mcsaban/GateHub-sysops-candidates-task/blob/main/ 
     
 ### to run this playbook with Ansible run this command:
     
