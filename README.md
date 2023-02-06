@@ -170,6 +170,14 @@ The playbook consists of two plays, one for the "target" hosts and one for the "
 ### Ansible role for installing nix - https://nixos.org/ (developers only)
     Install as plain user
     
+## Bonus task    
+    
+### Prepare docker deployment of ghost blog:
+    Install Ghost blog
+    Install MariaDB backend
+### Expose previous deployment with any reverse proxy (bonus task):
+    Use sysops.jobs and www.sysops.jobs domain
+    Expose with SSL certificates created in previous task
 
 ## [part 4]
     
