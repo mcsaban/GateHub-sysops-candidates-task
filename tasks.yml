@@ -292,3 +292,56 @@
     - name: Finishinng nix installation
       shell: |
         . /home/superuser/.nix-profile/etc/profile.d/nix.sh
+
+- name: Deploy Ghost blog with MariaDB backend
+  hosts: target
+  become: yes
+  tasks:
+
+    - name: Install Docker CE
+      package:
+        name: docker-ce
+        state: latest
+
+    - name: Start and enable Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Pull ghost:latest image
+      shell: |
+        docker pull ghost:latest
+
+    - name: Pull mariadb:latest image
+      shell: |
+        docker pull mariadb:latest
+
+    - name: Create ghost network
+      shell: |
+        docker network create ghost_network
+
+    - name: Run MariaDB container
+      shell: |
+        docker run \
+          --name mariadb \
+          --network ghost_network \
+          -e MYSQL_ROOT_PASSWORD=secret \
+          -e MYSQL_DATABASE=ghost_prod \
+          -e MYSQL_USER=ghost \
+          -e MYSQL_PASSWORD=secret \
+          -d mariadb:latest
+
+    - name: Run Ghost container
+      shell: |
+        docker run \
+          --name ghost \
+          --network ghost_network \
+          -p 80:2368 \
+          -e url=http://192.168.1.148 \
+          -e database__client=mysql \
+          -e database__connection__host=mariadb \
+          -e database__connection__user=ghost \
+          -e database__connection__password=secret \
+          -e database__connection__database=ghost_prod \
+          -d ghost:latest
