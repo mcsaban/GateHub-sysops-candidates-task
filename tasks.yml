@@ -1,195 +1,195 @@
----
 - name: Fedora Linux Update and Package Install
   hosts: target
   tasks:
-    - name: Update Fedora Server
-      dnf:
-        name: '*'
-        state: latest
-      become: true
+  - name: Update Fedora Server
+    dnf:
+      name: '*'
+      state: latest
+    become: true
 
-    - name: Install Snapd
-      dnf:
-        name: snapd
-        state: latest
-      become: true
+  - name: Install Snapd
+    dnf:
+      name: snapd
+      state: latest
+    become: true
 
-    - name: Install Slack via Snap
-      snap:
-        name: slack
-        channel: latest/stable
-      become: true
+  - name: Install Slack via Snap
+    snap:
+      name: slack
+      channel: latest/stable
+    become: true
 
-    - name: Add Gnome-tweaks Repository
-      dnf:
-        name: gnome-tweaks
-        state: latest
-      become: true
+  - name: Add Gnome-tweaks Repository
+    dnf:
+      name: gnome-tweaks
+      state: latest
+    become: true
 
-    - name: Install Htop
-      dnf:
-        name: htop
-        state: latest
-      become: true
+  - name: Install Htop
+    dnf:
+      name: htop
+      state: latest
+    become: true
 
-    - name: Install KeepassXC
-      dnf:
-        name: keepassxc
-        state: latest
-      become: true
+  - name: Install KeepassXC
+    dnf:
+      name: keepassxc
+      state: latest
+    become: true
 
-    - name: Install Zsh
-      dnf:
-        name: zsh
-        state: latest
-      become: true
-      
+  - name: Install Zsh
+    dnf:
+      name: zsh
+      state: latest
+    become: true
+
 - name: Docker role
   hosts: target:developer
   become: true
-  
-  tasks:   
-    - name: Install Docker Community Repository
-      command: >-
-        dnf config-manager
-        --add-repo=https://download.docker.com/linux/fedora/docker-ce.repo
-      become: 'yes'
-    - name: Install Vim
-      dnf:
-        name: vim
-        state: latest
-      become: 'yes'
-    - name: Install Docker
-      dnf:
-        name: docker-ce
-        state: latest
-      become: true
 
-    - name: Install Docker Compose
-      dnf:
-        name: docker-compose
-        state: latest
-      become: true
+  tasks:
+  - name: Install Docker Community Repository
+    command: >-
+      dnf config-manager --add-repo=https://download.docker.com/linux/fedora/docker-ce.repo
+    become: 'yes'
+  - name: Install Vim
+    dnf:
+      name: vim
+      state: latest
+    become: 'yes'
+  - name: Install Docker
+    dnf:
+      name: docker-ce
+      state: latest
+    become: true
 
-    - name: Start and Enable Docker Service
-      service:
-        name: docker
-        state: started
-        enabled: true
-      become: true
+  - name: Install Docker Compose
+    dnf:
+      name: docker-compose
+      state: latest
+    become: true
 
-    - name: Add all users to Docker group
-      shell: |
-        for user in $(cut -d: -f1 /etc/passwd); do usermod -aG docker $user; done
-      become: true
-      become_user: root
+  - name: Start and Enable Docker Service
+    service:
+      name: docker
+      state: started
+      enabled: true
+    become: true
+
+  - name: Add all users to Docker group
+    shell: |
+      for user in $(cut -d: -f1 /etc/passwd); do usermod -aG docker $user; done
+    become: true
+    become_user: root
 
 - name: Developer Tools and Packages Install
   hosts: developer
   tasks:
-    - name: Install Zsh
-      dnf:
-        name: zsh
-        state: latest
-      become: true
+  - name: Install Zsh
+    dnf:
+      name: zsh
+      state: latest
+    become: true
 
-    - name: Install Development Tools
-      dnf:
-        name: '@Development Tools'
-        state: latest
-      become: true
+  - name: Install Development Tools
+    dnf:
+      name: '@Development Tools'
+      state: latest
+    become: true
 
-    - name: Install C Development Tools and Libraries
-      dnf:
-        name: '@C Development Tools and Libraries'
-        state: latest
-      become: true
+  - name: Install C Development Tools and Libraries
+    dnf:
+      name: '@C Development Tools and Libraries'
+      state: latest
+    become: true
 
-    - name: Install Ansible
-      dnf:
-        name: ansible
-        state: latest
-      become: true
+  - name: Install Ansible
+    dnf:
+      name: ansible
+      state: latest
+    become: true
 
-    - name: Add Google Chrome Repository
-      command: |
-        dnf config-manager --add-repo=https://dl.google.com/linux/chrome/rpm/stable/x86_64
-      become: true
+  - name: Add Google Chrome Repository
+    command: |
+      dnf config-manager --add-repo=https://dl.google.com/linux/chrome/rpm/stable/x86_64
+    become: true
 
-    - name: Add Visual Studio Code Microsoft Repository
-      lineinfile:
-        dest: /etc/yum.repos.d/vscode.repo
-        line: |
-          [code]
-          name=Visual Studio Code
-          baseurl=https://packages.microsoft.com/yumrepos/vscode
-          enabled=1
-          gpgcheck=1
-          gpgkey=https://packages.microsoft.com/keys/microsoft.asc
-      become: true
+  - name: Add Visual Studio Code Microsoft Repository
+    lineinfile:
+      dest: /etc/yum.repos.d/vscode.repo
+      line: |
+        [code]
+        name=Visual Studio Code
+        baseurl=https://packages.microsoft.com/yumrepos/vscode
+        enabled=1
+        gpgcheck=1
+        gpgkey=https://packages.microsoft.com/keys/microsoft.asc
+    become: true
 
-    - name: Install Visual Studio Code
-      dnf:
-        name: code
-        state: latest
-      become: true
+  - name: Install Visual Studio Code
+    dnf:
+      name: code
+      state: latest
+    become: true
 
-    - name: Add MySQL Community Repository
-      command: 'dnf config-manager --add-repo=https://dev.mysql.com/downloads/repo/yum/'
-      become: 'yes'
-      
-      
+  - name: Add MySQL Community Repository
+    command: 'dnf config-manager --add-repo=https://dev.mysql.com/downloads/repo/yum/'
+    become: 'yes'
+
 - name: Ansible role for configuring SSH server
+
   hosts: target:developer
   become: true
 
   tasks:
-    - name: Disable password logins
-      lineinfile:
-        dest: /etc/ssh/sshd_config
-        line: 'PasswordAuthentication no'
-        state: present
-      become: true
+  - name: Disable password logins
+    lineinfile:
+      dest: /etc/ssh/sshd_config
+      line: 'PasswordAuthentication no'
+      state: present
+    become: true
 
-    - name: Disable root login
-      lineinfile:
-        dest: /etc/ssh/sshd_config
-        line: 'PermitRootLogin no'
-        state: present
-      become: true
+  - name: Disable root login
+    lineinfile:
+      dest: /etc/ssh/sshd_config
+      line: 'PermitRootLogin no'
+      state: present
+    become: true
 
-    - name: Disallow forwarding
-      lineinfile:
-        dest: /etc/ssh/sshd_config
-        line: 'AllowTcpForwarding no'
-        state: present
-      become: true
+  - name: Disallow forwarding
+    lineinfile:
+      dest: /etc/ssh/sshd_config
+      line: 'AllowTcpForwarding no'
+      state: present
+    become: true
 
-    - name: Install fail2ban
-      dnf:
-        name: fail2ban
-        state: latest
-      become: true
+  - name: Install fail2ban
+    dnf:
+      name: fail2ban
+      state: latest
+    become: true
 
-    - name: Install fail2ban and punish offensive ssh clients
-      lineinfile:
-        dest: /etc/fail2ban/jail.conf
-        line: |
-          [sshd]
-          enabled = true
-          port = ssh
-          filter = sshd
-          logpath = %(sshd_log)s
-          maxretry = 3
-        state: present
-      become: true
+  - name: Install fail2ban and punish offensive ssh clients
+    lineinfile:
+      dest: /etc/fail2ban/jail.conf
+      line: |
+        [sshd]
+        enabled = true
+        port = ssh
+        filter = sshd
+        logpath = %(sshd_log)s
+        maxretry = 3
+      state: present
+    become: true
 
-    - name: Enable and start fail2ban service
-      service:
-        name: fail2ban
-
+  - name: Enable and start fail2ban service
+    service:
+      name: fail2ban
 - name: Ansible role for configuring firewall
+  hosts: target
+  become: yes
   tasks:
+
   - name: Install firewalld
     package:
       name: firewalld
@@ -213,13 +213,11 @@
     firewalld:
       state: enabled
       permanent: yes
-      immediate: yes
       service: ssh
       zone: public
-      source: 'any'
-
 
   - name: Allow ICMP echo reply for private subnets
+
     firewalld:
       state: enabled
       permanent: yes
@@ -227,7 +225,7 @@
       rich_rule: 'rule family="ipv4" source address="10.0.0.0/8" accept'
       zone: internal
 
-  - name: Fedora Linux Firewall Configuration
+- name: Fedora Linux Firewall Configuration
   hosts: all
   become: yes
   become_user: root
@@ -248,11 +246,19 @@
   - name: Reload firewall
     shell: firewall-cmd --reload
     when: firewall_result.rc == 0
-    
-  - name: Ansible role for trusting all certificates issued by our CA
+
+- name: Ansible role for trusting all certificates issued by our CA
   hosts: target
   become: yes
   tasks:
+
+  - name: Create destination directory
+    file:
+      path: /usr/local/share/ca-certificates
+      state: directory
+      owner: root
+      group: root
+      mode: 0755
 
   - name: Copy the CA certificate to the system
     copy:
@@ -266,82 +272,82 @@
     shell: update-ca-trust
     become: yes
 
-
 - name: Ansible role for installing nix
+
   hosts: developer
   become: no
   tasks:
-    - name: Create a directory if it does not exist
-      ansible.builtin.file:
-       path: /nix
-       state: directory
-       mode: '0755'
-       owner: superuser
-       group: superuser
-      become: true
+  - name: Create a directory if it does not exist
+    ansible.builtin.file:
+      path: /nix
+      state: directory
+      mode: '0755'
+      owner: superuser
+      group: superuser
+    become: true
 
-    - name: Download Nix installation script
-      get_url:
-        url: https://nixos.org/nix/install
-        dest: /tmp/nix-install.sh
+  - name: Download Nix installation script
+    get_url:
+      url: https://nixos.org/nix/install
+      dest: /tmp/nix-install.sh
 
-    - name: Install Nix
-      shell: |
-        sh /tmp/nix-install.sh --no-daemon
-        source ~/.nix-profile/etc/profile.d/nix.sh
-    - name: Finishinng nix installation
-      shell: |
-        . /home/superuser/.nix-profile/etc/profile.d/nix.sh
+  - name: Install Nix
+    shell: |
+      sh /tmp/nix-install.sh --no-daemon
+      source ~/.nix-profile/etc/profile.d/nix.sh
+  - name: Finishinng nix installation
+    shell: |
+      . /home/superuser/.nix-profile/etc/profile.d/nix.sh
 
 - name: Deploy Ghost blog with MariaDB backend
   hosts: target
   become: yes
   tasks:
 
-    - name: Install Docker CE
-      package:
-        name: docker-ce
-        state: latest
+  - name: Install Docker CE
+    package:
+      name: docker-ce
+      state: latest
 
-    - name: Start and enable Docker service
-      service:
-        name: docker
-        state: started
-        enabled: yes
+  - name: Start and enable Docker service
+    service:
+      name: docker
+      state: started
+      enabled: yes
 
-    - name: Pull ghost:latest image
-      shell: |
-        docker pull ghost:latest
+  - name: Pull ghost:latest image
+    shell: |
+      docker pull ghost:latest
 
-    - name: Pull mariadb:latest image
-      shell: |
-        docker pull mariadb:latest
+  - name: Pull mariadb:latest image
+    shell: |
+      docker pull mariadb:latest
 
-    - name: Create ghost network
-      shell: |
-        docker network create ghost_network
+  - name: Create ghost network
+    shell: |
+      docker network create ghost_network
 
-    - name: Run MariaDB container
-      shell: |
-        docker run \
-          --name mariadb \
-          --network ghost_network \
-          -e MYSQL_ROOT_PASSWORD=secret \
-          -e MYSQL_DATABASE=ghost_prod \
-          -e MYSQL_USER=ghost \
-          -e MYSQL_PASSWORD=secret \
-          -d mariadb:latest
+  - name: Run MariaDB container
+    shell: |
+      docker run \
+        --name mariadb \
+        --network ghost_network \
+        -e MYSQL_ROOT_PASSWORD=secret \
+        -e MYSQL_DATABASE=ghost_prod \
+        -e MYSQL_USER=ghost \
+        -e MYSQL_PASSWORD=secret \
+        -d mariadb:latest
 
-    - name: Run Ghost container
-      shell: |
-        docker run \
-          --name ghost \
-          --network ghost_network \
-          -p 80:2368 \
-          -e url=http://192.168.1.148 \
-          -e database__client=mysql \
-          -e database__connection__host=mariadb \
-          -e database__connection__user=ghost \
-          -e database__connection__password=secret \
-          -e database__connection__database=ghost_prod \
-          -d ghost:latest
+  - name: Run Ghost container
+    shell: |
+      docker run \
+        --name ghost \
+        --network ghost_network \
+        -p 80:2368 \
+        -e url=http://192.168.1.148 \
+        -e database__client=mysql \
+        -e database__connection__host=mariadb \
+        -e database__connection__user=ghost \
+        -e database__connection__password=secret \
+        -e database__connection__database=ghost_prod \
+        -d ghost:latest
