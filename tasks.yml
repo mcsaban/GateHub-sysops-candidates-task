@@ -134,7 +134,7 @@
         enabled=1
         gpgcheck=1
         gpgkey=https://packages.microsoft.com/keys/microsoft.asc
-      create: yes    
+      create: yes
     become: true
 
   - name: Install Visual Studio Code
@@ -213,17 +213,12 @@
       enabled: yes
 
   - name: Block incoming traffic
-    firewalld:
-      state: enabled
-      permanent: true
-      immediate: false
-      zone: public
-      target: DROP
+    command: sudo firewall-cmd --permanent --add-rich-rule="rule family='ipv4' source address='192.168.2.0/24' reject"
 
   - name: Allow SSH
     firewalld:
       state: enabled
-      permanent: yes
+      permanent: true
       service: ssh
       zone: public
 
