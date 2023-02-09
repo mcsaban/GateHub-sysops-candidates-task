@@ -84,6 +84,7 @@
 
 - name: Developer Tools and Packages Install
   hosts: developer
+  become: true
   tasks:
   - name: Install Zsh
     dnf:
@@ -114,9 +115,18 @@
       dnf config-manager --add-repo=https://dl.google.com/linux/chrome/rpm/stable/x86_64
     become: true
 
+  - name: Create destination directory
+    file:
+      path: /etc/yum.repos.d
+      state: directory
+      owner: root
+      group: root
+      mode: 0755
+    become: true
+
   - name: Add Visual Studio Code Microsoft Repository
     lineinfile:
-      dest: /etc/yum.repos.d/vscode.repo
+      path: /etc/yum.repos.d/vscode.repo
       line: |
         [code]
         name=Visual Studio Code
@@ -124,6 +134,7 @@
         enabled=1
         gpgcheck=1
         gpgkey=https://packages.microsoft.com/keys/microsoft.asc
+      create: yes    
     become: true
 
   - name: Install Visual Studio Code
